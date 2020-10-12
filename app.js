@@ -4,6 +4,13 @@ class Node {
         this.next = next;
     }
 }
+class DoubleNode {
+    constructor(val, prev, next) {
+        this.value = val;
+        this.prev = prev;
+        this.next = next;
+    }
+}
 
 class StackOperations {
     constructor() {
@@ -13,13 +20,15 @@ class StackOperations {
 
     customPush(val) {
         let newNode = new Node(val, this.head);
+        prependDataOnScreen(newNode.value)
         this.head = newNode;
-        this.length = this.length + 1;
+        this.length++;
     }
 
     customPop() {
         this.head = this.head.next;
         this.length--;
+        removeHeadFromScreen()
     }
 
     search(val) {
@@ -45,6 +54,7 @@ class StackOperations {
 
         for (var i = 0; i < this.length; i++) {
             console.log(`${currentNode.value} -> `)
+            // displayDataOnScreen(currentNode.value)
             currentNode = currentNode.next
         }
         console.log("null");
@@ -57,11 +67,11 @@ class StackOperations {
 class QueueOperations {
     constructor() {
         this.head = null;
-        this.tail = null;
         this.length = 0;
     }
     customPush(val) {
         let newNode = new Node(val, this.head);
+        prependDataOnScreen(newNode.value);
         this.head = newNode;
         this.length = this.length + 1;
     }
@@ -71,10 +81,13 @@ class QueueOperations {
         for (var i = 2; i < this.length; i++) {
             currentNode = currentNode.next
         }
-
+        console.log(this.head.value)
+        console.log(currentNode.next.value)
         currentNode.next = null
         this.length--;
-        console.log("pop")
+        if (this.length == 0)
+            console.log("pop")
+        removeTailFromScreen()
     }
 
     search(val) {
@@ -97,7 +110,6 @@ class QueueOperations {
     }
     display() {
         let currentNode = this.head
-        // console.log(`ome ${this.tail.next}`)
         for (var i = 0; i < this.length; i++) {
             console.log(`${currentNode.value} -> `)
             currentNode = currentNode.next
@@ -109,8 +121,145 @@ class QueueOperations {
 
 }
 
+class SCLL {
+    constructor() {
+        this.tail = null;
+        this.length = 0;
+    }
+
+    insertAtHead(val) {
+        let newNode;
+        if (this.length == 0) {
+            newNode = new Node(val, this.tail);
+            this.tail = newNode;
+        }
+        else {
+            newNode = new Node(val, this.tail.next);
+        }
+        this.tail.next = newNode;
+        this.length++;
+    }
+
+    insertAtTail(val) {
+        this.insertAtHead(val);
+        this.tail = this.tail.next
+    }
+
+    deleteHead() {
+        this.tail.next = this.tail.next.next;
+        this.length--;
+    }
+    deleteTail() {
+        // Traverse list till second last element
+        let secondLastNode = this.tail.next;
+        for (var i = 2; i < this.length; i++) {
+            secondLastNode = secondLastNode.next;
+        }
+        console.log(`Second last : ${secondLastNode.value}`)
+        secondLastNode.next = this.tail.next;
+        this.tail = secondLastNode;
+        this.length--;
+    }
+
+    searchLinkedlist(val) {
+        let currentNode = this.tail.next;
+        let index = -1;
+        for (var i = 0; i < this.length; i++) {
+            if (currentNode.value == val) {
+                index = i;
+                break;
+            }
+            else {
+                currentNode = currentNode.next;
+            }
+        }
+        if (index == -1) {
+            console.log("Not found :(")
+        }
+        else {
+            console.log(`${val} found at index ${index}`)
+        }
+    }
+    display() {
+        let currentNode = this.tail.next;
+        for (var i = 0; i < this.length; i++) {
+            console.log(currentNode.value);
+            currentNode = currentNode.next;
+        }
+    }
+}
+class DCLL {
+    constructor() {
+        this.tail = null;
+        this.length = 0;
+    }
+    insertAtHead(val) {
+        let newNode;
+        if (this.length == 0) {
+            newNode = new DoubleNode(val, this.tail, this.tail);
+            this.tail = newNode;
+            this.tail.prev = newNode;
+            this.tail.next = newNode;
+            console.log(this.tail)
+        }
+        else {
+            newNode = new DoubleNode(val, this.tail, this.tail.next);
+            this.tail.next.prev = newNode;
+            this.tail.next = newNode;
+        }
+        this.length++;
+    }
+    insertAtTail(val) {
+        this.insertAtHead(val);
+        this.tail = this.tail.next;
+    }
+
+
+    deleteHead() {
+        this.tail.next = this.tail.next.next;
+        this.tail.next.prev = this.tail;
+        this.length--;
+    }
+
+    deleteTail() {
+        this.tail.prev.next = this.tail.next;
+        this.tail.next.prev = this.tail.prev;
+        this.tail = this.tail.prev;
+        this.length--;
+    }
+
+    searchVal(val) {
+        let currentNode = this.tail.next;
+        let index = -1;
+        for (var i = 0; i < this.length; i++) {
+            if (currentNode.value == val) {
+                index = i;
+                break;
+            }
+            else {
+                currentNode = currentNode.next;
+            }
+        }
+
+        if (index == -1) {
+            console.log("Not found ");
+        }
+        else {
+            console.log(`${val} found at index ${index}`)
+        }
+    }
+    display() {
+        let currentNode = this.tail.next;
+        for (var i = 0; i < this.length; i++) {
+            console.log(currentNode.value)
+            currentNode = currentNode.next;
+        }
+
+    }
+}
+
 function testStack() {
-    const stack = new QueueOperations;
+    const stack = new StackOperations;
     stack.customPush(1)
     stack.customPush(2)
     stack.customPush(3)
@@ -123,4 +272,107 @@ function testStack() {
     stack.display()
     stack.search(2)
 }
-testStack()
+// testStack()
+
+function testSingleCircular() {
+    let singlyLinked = new SCLL;
+    singlyLinked.insertAtHead(1)
+    singlyLinked.insertAtHead(2)
+    singlyLinked.insertAtTail(0)
+    singlyLinked.insertAtHead(4)
+
+    singlyLinked.insertAtHead(3)
+    singlyLinked.insertAtTail(-1)
+
+    singlyLinked.display()
+
+    singlyLinked.insertAtHead(4)
+    console.log("Second siplay")
+    singlyLinked.display()
+    singlyLinked.deleteTail()
+    singlyLinked.deleteHead()
+    console.log("third")
+
+    singlyLinked.display()
+    singlyLinked.deleteTail()
+    console.log("third")
+    singlyLinked.insertAtHead(4)
+    singlyLinked.insertAtTail(0)
+
+    singlyLinked.display()
+    singlyLinked.searchLinkedlist(4)
+}
+// testCircular();
+
+function testDoubleCircular() {
+    let doublyLinked = new DCLL;
+    doublyLinked.insertAtTail(0)
+    doublyLinked.insertAtHead(1)
+    doublyLinked.insertAtHead(2)
+    doublyLinked.insertAtHead(3)
+    doublyLinked.insertAtHead(4)
+    doublyLinked.insertAtHead(5)
+    doublyLinked.insertAtTail(-1)
+    doublyLinked.insertAtHead(6)
+    doublyLinked.deleteHead()
+    doublyLinked.deleteTail()
+    doublyLinked.insertAtHead(6)
+    doublyLinked.insertAtTail(-1)
+    doublyLinked.display()
+    doublyLinked.searchVal(-1)
+
+}
+// testDoubleCircular()
+
+
+
+// Data display and remove functions
+let outputArea = document.querySelector(".outputArea");
+function prependDataOnScreen(data) {
+    let dataDiv = document.createElement("div");
+    dataDiv.innerText = data;
+    dataDiv.classList.add("data")
+    outputArea.prepend(dataDiv);
+}
+function removeHeadFromScreen() {
+    document.querySelector(".data").remove()
+}
+function removeTailFromScreen() {
+    document.querySelectorAll(".data")[document.querySelectorAll(".data").length - 1].remove()
+}
+
+// Assign variable values
+let push = document.querySelector("#push")
+let pushInput = document.querySelector("#push input")
+let pop = document.querySelector("#pop")
+let pushBtn = document.querySelector("#push-btn")
+let searchBtn = document.querySelector("#search-btn")
+let searchInput = document.querySelector("#search input")
+let search = document.querySelector("#search")
+function stackDisplay() {
+    // Original Stack
+    let stack = new QueueOperations;
+    stack.customPush(1);
+    stack.customPush(2);
+    stack.customPush(3);
+    // event listeners
+    pushBtn.addEventListener("click", () => {
+        if (!isNaN(pushInput.value) && pushInput.value) {
+            stack.customPush(pushInput.value)
+            stack.display();
+        }
+    })
+    pop.addEventListener("click", () => {
+        stack.customPop();
+        stack.display();
+    })
+    searchBtn.addEventListener("click", () => {
+        if (!isNaN(searchInput.value) && searchInput.value) {
+            stack.search(searchInput.value)
+        }
+    })
+}
+document.addEventListener("DOMContentLoaded", () => {
+    stackDisplay()
+})
+
