@@ -136,18 +136,22 @@ class SCLL {
         else {
             newNode = new Node(val, this.tail.next);
         }
+        prependDataOnScreen(newNode.value);
         this.tail.next = newNode;
         this.length++;
     }
 
     insertAtTail(val) {
         this.insertAtHead(val);
+        removeHeadFromScreen()
         this.tail = this.tail.next
+        appendDataOnScreen(this.tail.value)
     }
 
     deleteHead() {
         this.tail.next = this.tail.next.next;
         this.length--;
+        removeHeadFromScreen();
     }
     deleteTail() {
         // Traverse list till second last element
@@ -159,6 +163,7 @@ class SCLL {
         secondLastNode.next = this.tail.next;
         this.tail = secondLastNode;
         this.length--;
+        removeTailFromScreen()
     }
 
     searchLinkedlist(val) {
@@ -207,11 +212,14 @@ class DCLL {
             this.tail.next.prev = newNode;
             this.tail.next = newNode;
         }
+        prependDataOnScreen(newNode.value);
         this.length++;
     }
     insertAtTail(val) {
         this.insertAtHead(val);
+        removeHeadFromScreen();
         this.tail = this.tail.next;
+        appendDataOnScreen(val)
     }
 
 
@@ -219,6 +227,7 @@ class DCLL {
         this.tail.next = this.tail.next.next;
         this.tail.next.prev = this.tail;
         this.length--;
+        removeHeadFromScreen()
     }
 
     deleteTail() {
@@ -226,6 +235,7 @@ class DCLL {
         this.tail.next.prev = this.tail.prev;
         this.tail = this.tail.prev;
         this.length--;
+        removeTailFromScreen();
     }
 
     searchVal(val) {
@@ -330,9 +340,26 @@ function testDoubleCircular() {
 let outputArea = document.querySelector(".outputArea");
 function prependDataOnScreen(data) {
     let dataDiv = document.createElement("div");
-    dataDiv.innerText = data;
-    dataDiv.classList.add("data")
+    let dataVal = document.createElement("div");
+    let nextVal = document.createElement("div");
+    dataVal.innerText = data;
+    dataDiv.classList.add("memBlock")
+    dataVal.classList.add("data");
+    nextVal.classList.add("next");
+    dataDiv.appendChild(dataVal);
+    dataDiv.appendChild(nextVal);
     outputArea.prepend(dataDiv);
+}
+function appendDataOnScreen(data) {
+    let dataDiv = document.createElement("div");
+    let dataVal = document.createElement("div");
+    let nextVal = document.createElement("div");
+    dataVal.innerText = data;
+    dataVal.classList.add("data");
+    nextVal.classList.add("next");
+    dataDiv.appendChild(dataVal);
+    dataDiv.appendChild(nextVal);
+    outputArea.append(dataDiv);
 }
 function removeHeadFromScreen() {
     document.querySelector(".data").remove()
@@ -340,38 +367,42 @@ function removeHeadFromScreen() {
 function removeTailFromScreen() {
     document.querySelectorAll(".data")[document.querySelectorAll(".data").length - 1].remove()
 }
-
-// Assign variable values
-let push = document.querySelector("#push")
-let pushInput = document.querySelector("#push input")
-let pop = document.querySelector("#pop")
-let pushBtn = document.querySelector("#push-btn")
-let searchBtn = document.querySelector("#search-btn")
-let searchInput = document.querySelector("#search input")
-let search = document.querySelector("#search")
-function stackDisplay() {
-    // Original Stack
-    let stack = new QueueOperations;
-    stack.customPush(1);
-    stack.customPush(2);
-    stack.customPush(3);
-    // event listeners
-    pushBtn.addEventListener("click", () => {
-        if (!isNaN(pushInput.value) && pushInput.value) {
-            stack.customPush(pushInput.value)
+if (document.querySelector(".stack")) {
+    // Assign variable values
+    let push = document.querySelector("#push")
+    let pushInput = document.querySelector("#push input")
+    let pop = document.querySelector("#pop")
+    let pushBtn = document.querySelector("#push-btn")
+    let searchBtn = document.querySelector("#search-btn")
+    let searchInput = document.querySelector("#search input")
+    let search = document.querySelector("#search")
+    function stackDisplay() {
+        // Original Stack
+        let stack = new QueueOperations;
+        stack.customPush(1);
+        stack.customPush(2);
+        stack.customPush(3);
+        // event listeners
+        pushBtn.addEventListener("click", () => {
+            if (!isNaN(pushInput.value) && pushInput.value) {
+                stack.customPush(pushInput.value)
+                stack.display();
+            }
+        })
+        pop.addEventListener("click", () => {
+            stack.customPop();
             stack.display();
-        }
-    })
-    pop.addEventListener("click", () => {
-        stack.customPop();
-        stack.display();
-    })
-    searchBtn.addEventListener("click", () => {
-        if (!isNaN(searchInput.value) && searchInput.value) {
-            stack.search(searchInput.value)
-        }
-    })
+        })
+        searchBtn.addEventListener("click", () => {
+            if (!isNaN(searchInput.value) && searchInput.value) {
+                stack.search(searchInput.value)
+            }
+        })
+    }
 }
+
+
+let pushHead = document.querySelector("#pushHead")
 document.addEventListener("DOMContentLoaded", () => {
     stackDisplay()
 })
