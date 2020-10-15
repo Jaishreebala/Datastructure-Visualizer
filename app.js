@@ -343,7 +343,7 @@ function prependDataOnScreen(data) {
     let dataVal = document.createElement("div");
     let nextVal = document.createElement("div");
     dataVal.innerText = data;
-    dataDiv.classList.add("memBlock")
+    dataDiv.classList.add("memBlock");
     dataVal.classList.add("data");
     nextVal.classList.add("next");
     dataDiv.appendChild(dataVal);
@@ -355,6 +355,7 @@ function appendDataOnScreen(data) {
     let dataVal = document.createElement("div");
     let nextVal = document.createElement("div");
     dataVal.innerText = data;
+    dataDiv.classList.add("memBlock");
     dataVal.classList.add("data");
     nextVal.classList.add("next");
     dataDiv.appendChild(dataVal);
@@ -362,12 +363,12 @@ function appendDataOnScreen(data) {
     outputArea.append(dataDiv);
 }
 function removeHeadFromScreen() {
-    document.querySelector(".data").remove()
+    document.querySelector(".memBlock").remove()
 }
 function removeTailFromScreen() {
-    document.querySelectorAll(".data")[document.querySelectorAll(".data").length - 1].remove()
+    document.querySelectorAll(".memBlock")[document.querySelectorAll(".memBlock").length - 1].remove()
 }
-if (document.querySelector(".stack")) {
+if (document.querySelector(".stackArea")) {
     // Assign variable values
     let push = document.querySelector("#push")
     let pushInput = document.querySelector("#push input")
@@ -387,6 +388,7 @@ if (document.querySelector(".stack")) {
             if (!isNaN(pushInput.value) && pushInput.value) {
                 stack.customPush(pushInput.value)
                 stack.display();
+                pushInput.value = "";
             }
         })
         pop.addEventListener("click", () => {
@@ -396,6 +398,7 @@ if (document.querySelector(".stack")) {
         searchBtn.addEventListener("click", () => {
             if (!isNaN(searchInput.value) && searchInput.value) {
                 stack.search(searchInput.value)
+                searchInput.value = ""
             }
         })
     }
@@ -407,3 +410,45 @@ document.addEventListener("DOMContentLoaded", () => {
     stackDisplay()
 })
 
+const dropdown = document.querySelector(".dropdown-clickarea");
+const dsArea = document.querySelectorAll(".dsArea")
+dropdown.addEventListener("click", () => {
+    document.querySelector(".menu-items").style.display = "block"
+})
+
+
+document.body.addEventListener("click", (e) => {
+    if (!e.target.classList.contains("title")) {
+        document.querySelectorAll(".menu-items").forEach(menu => {
+            menu.style.display = "none"
+        })
+
+    }
+    if (e.target.classList.contains("stack-item")) {
+        document.querySelector(".dropdown-clickarea .title").innerText = e.target.innerText
+        hideAll(dsArea)
+        dsArea[0].style.display = "flex"
+        stackDisplay()
+    }
+    if (e.target.classList.contains("queue-item")) {
+        document.querySelector(".dropdown-clickarea .title").innerText = e.target.innerText
+        hideAll(dsArea)
+        dsArea[1].style.display = "flex"
+    }
+    if (e.target.classList.contains("csll-item")) {
+        document.querySelector(".dropdown-clickarea .title").innerText = e.target.innerText
+        hideAll(dsArea)
+        dsArea[2].style.display = "flex"
+    }
+    if (e.target.classList.contains("cdll-item")) {
+        document.querySelector(".dropdown-clickarea .title").innerText = e.target.innerText
+        hideAll(dsArea)
+        dsArea[3].style.display = "flex"
+
+    }
+})
+function hideAll(item) {
+    item.forEach(dataArea => {
+        dataArea.style.display = "none"
+    })
+}
