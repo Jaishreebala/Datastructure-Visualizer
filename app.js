@@ -20,7 +20,7 @@ class StackOperations {
 
     customPush(val) {
         let newNode = new Node(val, this.head);
-        prependDataOnScreen(newNode.value)
+        prependDataOnScreen("stackArea", newNode.value)
         this.head = newNode;
         this.length++;
     }
@@ -28,7 +28,7 @@ class StackOperations {
     customPop() {
         this.head = this.head.next;
         this.length--;
-        removeHeadFromScreen()
+        removeHeadFromScreen("stackArea")
         this.display()
     }
 
@@ -72,7 +72,7 @@ class QueueOperations {
     }
     customPush(val) {
         let newNode = new Node(val, this.head);
-        prependDataOnScreen(newNode.value);
+        prependDataOnScreen("queueArea", newNode.value);
         this.head = newNode;
         this.length = this.length + 1;
     }
@@ -88,7 +88,7 @@ class QueueOperations {
         this.length--;
         if (this.length == 0)
             console.log("pop")
-        removeTailFromScreen()
+        removeTailFromScreen("queueArea")
     }
 
     search(val) {
@@ -137,22 +137,22 @@ class SCLL {
         else {
             newNode = new Node(val, this.tail.next);
         }
-        prependDataOnScreen(newNode.value);
+        prependDataOnScreen("csllArea", newNode.value);
         this.tail.next = newNode;
         this.length++;
     }
 
     insertAtTail(val) {
         this.insertAtHead(val);
-        removeHeadFromScreen()
+        removeHeadFromScreen("csllArea")
         this.tail = this.tail.next
-        appendDataOnScreen(this.tail.value)
+        appendDataOnScreen("csllArea", this.tail.value)
     }
 
     deleteHead() {
         this.tail.next = this.tail.next.next;
         this.length--;
-        removeHeadFromScreen();
+        removeHeadFromScreen("csllArea");
     }
     deleteTail() {
         // Traverse list till second last element
@@ -164,7 +164,7 @@ class SCLL {
         secondLastNode.next = this.tail.next;
         this.tail = secondLastNode;
         this.length--;
-        removeTailFromScreen()
+        removeTailFromScreen("csllArea")
     }
 
     searchLinkedlist(val) {
@@ -213,14 +213,14 @@ class DCLL {
             this.tail.next.prev = newNode;
             this.tail.next = newNode;
         }
-        prependDataOnScreen(newNode.value);
+        prependDataOnScreen("cdllArea", newNode.value);
         this.length++;
     }
     insertAtTail(val) {
         this.insertAtHead(val);
-        removeHeadFromScreen();
+        removeHeadFromScreen("cdllArea");
         this.tail = this.tail.next;
-        appendDataOnScreen(val)
+        appendDataOnScreen("cdllArea", val)
     }
 
 
@@ -228,7 +228,7 @@ class DCLL {
         this.tail.next = this.tail.next.next;
         this.tail.next.prev = this.tail;
         this.length--;
-        removeHeadFromScreen()
+        removeHeadFromScreen("cdllArea")
     }
 
     deleteTail() {
@@ -236,10 +236,10 @@ class DCLL {
         this.tail.next.prev = this.tail.prev;
         this.tail = this.tail.prev;
         this.length--;
-        removeTailFromScreen();
+        removeTailFromScreen("cdllArea");
     }
 
-    searchVal(val) {
+    searchLinkedlist(val) {
         let currentNode = this.tail.next;
         let index = -1;
         for (var i = 0; i < this.length; i++) {
@@ -338,8 +338,8 @@ function testDoubleCircular() {
 
 
 // Data display and remove functions
-let outputArea = document.querySelector(".outputArea");
-function prependDataOnScreen(data) {
+function prependDataOnScreen(dsArea, data) {
+    let outputArea = document.querySelector(`.${dsArea} .outputArea`);
     let dataDiv = document.createElement("div");
     let dataVal = document.createElement("div");
     let nextVal = document.createElement("div");
@@ -351,7 +351,8 @@ function prependDataOnScreen(data) {
     dataDiv.appendChild(nextVal);
     outputArea.prepend(dataDiv);
 }
-function appendDataOnScreen(data) {
+function appendDataOnScreen(dsArea, data) {
+    let outputArea = document.querySelector(`.${dsArea} .outputArea`);
     let dataDiv = document.createElement("div");
     let dataVal = document.createElement("div");
     let nextVal = document.createElement("div");
@@ -363,63 +364,108 @@ function appendDataOnScreen(data) {
     dataDiv.appendChild(nextVal);
     outputArea.append(dataDiv);
 }
-function removeHeadFromScreen() {
-    document.querySelector(".memBlock").remove()
+function removeHeadFromScreen(dsArea) {
+    document.querySelector(`.${dsArea} .memBlock`).remove()
 }
-function removeTailFromScreen() {
-    document.querySelectorAll(".memBlock")[document.querySelectorAll(".memBlock").length - 1].remove()
+function removeTailFromScreen(dsArea) {
+    document.querySelectorAll(`.${dsArea} .memBlock`)[document.querySelectorAll(`.${dsArea} .memBlock`).length - 1].remove()
 }
-if (document.querySelector(".stackArea")) {
+function straightLLDisplay(areaName, dsName) {
     // Assign variable values
-    let push = document.querySelector("#push")
-    let pushInput = document.querySelector("#push input")
-    let pop = document.querySelector("#pop")
-    let pushBtn = document.querySelector("#push-btn")
-    let searchBtn = document.querySelector("#search-btn")
-    let searchInput = document.querySelector("#search input")
-    let search = document.querySelector("#search")
-    function stackDisplay(stack) {
-        // Original Stack
-        if (stack.length == 0) {
-            stack.customPush(1);
-            stack.customPush(2);
-            stack.customPush(3);
-        }
-        // event listeners
-        pushBtn.addEventListener("click", () => {
-            if (!isNaN(pushInput.value) && pushInput.value) {
-                stack.customPush(pushInput.value)
-                stack.display();
-                pushInput.value = "";
-            }
-        })
-        pop.addEventListener("click", () => {
-            stack.customPop();
-            stack.display();
-        })
-        searchBtn.addEventListener("click", () => {
-            if (!isNaN(searchInput.value) && searchInput.value) {
-                stack.search(searchInput.value)
-                searchInput.value = ""
-            }
-        })
+    let pushHeadInput = document.querySelector(`.${areaName} .push input`);
+    let pushBtn = document.querySelector(`.${areaName} .push-btn`);
+    let pop = document.querySelector(`.${areaName} .pop`);
+    let searchInput = document.querySelector(`.${areaName} .search input`);
+    let searchBtn = document.querySelector(`.${areaName} .search-btn`);
+    // Original Stack
+    if (dsName.length == 0) {
+        dsName.customPush(1);
+        dsName.customPush(2);
+        dsName.customPush(3);
     }
+    // event listeners
+    pushBtn.addEventListener("click", () => {
+        if (!isNaN(pushHeadInput.value) && pushHeadInput.value) {
+            dsName.customPush(pushHeadInput.value)
+            dsName.display();
+            pushHeadInput.value = "";
+        }
+    })
+    pop.addEventListener("click", () => {
+        dsName.customPop();
+        dsName.display();
+    })
+    searchBtn.addEventListener("click", () => {
+        if (!isNaN(searchInput.value) && searchInput.value) {
+            dsName.search(searchInput.value)
+            searchInput.value = ""
+        }
+    })
+
+}
+
+function doubleLLDisplay(areaName, dsName) {
+    // Assign variable values
+    let pushHeadInput = document.querySelector(`.${areaName} .pushHead input`);
+    let pushHeadBtn = document.querySelector(`.${areaName} .push-head-btn`);
+    let pushTailInput = document.querySelector(`.${areaName} .pushTail input`);
+    let pushTailBtn = document.querySelector(`.${areaName} .push-tail-btn`);
+    let popHead = document.querySelector(`.${areaName} .popHead`);
+    let popTail = document.querySelector(`.${areaName} .popTail`);
+    let searchInput = document.querySelector(`.${areaName} .search input`);
+    let searchBtn = document.querySelector(`.${areaName} .search-btn`);
+    // Original Stack
+    if (dsName.length == 0) {
+        dsName.insertAtHead(1);
+        dsName.insertAtHead(2);
+        dsName.insertAtHead(3);
+    }
+    // event listeners
+    pushHeadBtn.addEventListener("click", () => {
+        if (!isNaN(pushHeadInput.value) && pushHeadInput.value) {
+            dsName.insertAtHead(pushHeadInput.value)
+            dsName.display();
+            pushHeadInput.value = "";
+        }
+    })
+    pushTailBtn.addEventListener("click", () => {
+        if (!isNaN(pushTailInput.value) && pushTailInput.value) {
+            dsName.insertAtTail(pushTailInput.value)
+            dsName.display();
+            pushTailInput.value = "";
+        }
+    })
+    popHead.addEventListener("click", () => {
+        dsName.deleteHead();
+        dsName.display();
+    })
+    popTail.addEventListener("click", () => {
+        dsName.deleteTail();
+        dsName.display();
+    })
+    searchBtn.addEventListener("click", () => {
+        if (!isNaN(searchInput.value) && searchInput.value) {
+            dsName.searchLinkedlist(searchInput.value)
+            searchInput.value = ""
+        }
+    })
+
 }
 let stack = new StackOperations;
+let queue = new QueueOperations;
+let scll = new SCLL;
+let dcll = new DCLL;
+straightLLDisplay("stackArea", stack);
+straightLLDisplay("queueArea", queue);
+doubleLLDisplay("csllArea", scll)
+doubleLLDisplay("cdllArea", dcll)
 
-
-let pushHead = document.querySelector("#pushHead")
-document.addEventListener("DOMContentLoaded", () => {
-    stackDisplay(stack)
-})
-
+// Dropdown Code
 const dropdown = document.querySelector(".dropdown-clickarea");
 const dsArea = document.querySelectorAll(".dsArea")
 dropdown.addEventListener("click", () => {
     document.querySelector(".menu-items").style.display = "block"
 })
-
-
 document.body.addEventListener("click", (e) => {
     if (!e.target.classList.contains("title")) {
         document.querySelectorAll(".menu-items").forEach(menu => {
@@ -431,7 +477,6 @@ document.body.addEventListener("click", (e) => {
         document.querySelector(".dropdown-clickarea .title").innerText = e.target.innerText
         hideAll(dsArea)
         dsArea[0].style.display = "flex"
-        // stackDisplay(stack)
     }
     if (e.target.classList.contains("queue-item")) {
         document.querySelector(".dropdown-clickarea .title").innerText = e.target.innerText
