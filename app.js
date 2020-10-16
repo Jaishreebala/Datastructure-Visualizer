@@ -29,6 +29,7 @@ class StackOperations {
         this.head = this.head.next;
         this.length--;
         removeHeadFromScreen()
+        this.display()
     }
 
     search(val) {
@@ -377,12 +378,13 @@ if (document.querySelector(".stackArea")) {
     let searchBtn = document.querySelector("#search-btn")
     let searchInput = document.querySelector("#search input")
     let search = document.querySelector("#search")
-    function stackDisplay() {
+    function stackDisplay(stack) {
         // Original Stack
-        let stack = new QueueOperations;
-        stack.customPush(1);
-        stack.customPush(2);
-        stack.customPush(3);
+        if (stack.length == 0) {
+            stack.customPush(1);
+            stack.customPush(2);
+            stack.customPush(3);
+        }
         // event listeners
         pushBtn.addEventListener("click", () => {
             if (!isNaN(pushInput.value) && pushInput.value) {
@@ -403,11 +405,12 @@ if (document.querySelector(".stackArea")) {
         })
     }
 }
+let stack = new StackOperations;
 
 
 let pushHead = document.querySelector("#pushHead")
 document.addEventListener("DOMContentLoaded", () => {
-    stackDisplay()
+    stackDisplay(stack)
 })
 
 const dropdown = document.querySelector(".dropdown-clickarea");
@@ -428,7 +431,7 @@ document.body.addEventListener("click", (e) => {
         document.querySelector(".dropdown-clickarea .title").innerText = e.target.innerText
         hideAll(dsArea)
         dsArea[0].style.display = "flex"
-        stackDisplay()
+        // stackDisplay(stack)
     }
     if (e.target.classList.contains("queue-item")) {
         document.querySelector(".dropdown-clickarea .title").innerText = e.target.innerText
